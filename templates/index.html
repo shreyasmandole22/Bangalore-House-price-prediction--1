@@ -1,0 +1,1499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeScope | Bangalore House Price Prediction</title>
+
+    <style>
+        :root {
+            --bg: #080f1e;
+            --surface: #0e1a2d;
+            --surface-light: #14243b;
+            --border: #263953;
+            --text: #edf3ff;
+            --muted: #92a3bf;
+            --accent: #65e0c2;
+            --blue: #7195ff;
+            --danger: #ff818b;
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(ellipse at 80% 0%, #182d4c 0%, transparent 38%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        button, input, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: auto;
+            padding: 0 28px;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #080f1eeF;
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: 1240px;
+            min-height: 78px;
+            padding: 14px 28px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #4ce0ba, #5586ff);
+            color: #071525;
+            font-size: 23px;
+            font-weight: 900;
+            box-shadow: 0 6px 25px #52dcb62b;
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            letter-spacing: -0.7px;
+        }
+
+        .brand p {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: var(--muted);
+            padding: 10px 14px;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-light);
+            color: var(--text);
+        }
+
+        .nav-btn.active {
+            color: var(--accent);
+            background: #142c36;
+            border-color: #285449;
+        }
+
+        /* Shared sections */
+
+        main {
+            min-height: calc(100vh - 150px);
+        }
+
+        .page {
+            display: none;
+            padding-top: 45px;
+            padding-bottom: 65px;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(9px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            background: #102c2b;
+            border: 1px solid #245044;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: clamp(27px, 4vw, 42px);
+            letter-spacing: -1.4px;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 14px;
+            max-width: 680px;
+            line-height: 1.9;
+        }
+
+        .panel {
+            background: linear-gradient(145deg, #101f34, #0c1729);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 26px;
+            box-shadow: 0 16px 45px #00000015;
+        }
+
+        .panel h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .panel p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* Home */
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 0.85fr;
+            align-items: center;
+            gap: 45px;
+            margin-bottom: 38px;
+        }
+
+        .hero h2 {
+            font-size: clamp(35px, 5vw, 57px);
+            letter-spacing: -2.2px;
+            line-height: 1.12;
+            margin-bottom: 20px;
+        }
+
+        .hero h2 span {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            max-width: 520px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 24px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .tag {
+            border: 1px solid var(--border);
+            background: #102039;
+            padding: 7px 11px;
+            border-radius: 9px;
+            font-size: 11px;
+            color: #c9d7ef;
+        }
+
+        .hero-visual {
+            min-height: 265px;
+            border: 1px solid #2a4560;
+            border-radius: 24px;
+            padding: 24px;
+            background:
+                radial-gradient(circle at 85% 12%, #3b9f9250, transparent 40%),
+                linear-gradient(145deg, #142b40, #0c172a);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .visual-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .visual-icon {
+            font-size: 70px;
+            text-align: center;
+            margin: 8px 0;
+            filter: drop-shadow(0 10px 20px #0005);
+        }
+
+        .visual-caption {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .visual-caption strong {
+            font-size: 18px;
+        }
+
+        .visual-caption span {
+            color: var(--accent);
+            font-size: 11px;
+        }
+
+        .prediction-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 15px;
+            margin-bottom: 23px;
+        }
+
+        .panel-heading p {
+            margin-top: 4px;
+        }
+
+        .mini-badge {
+            font-size: 10px;
+            color: var(--accent);
+            border: 1px solid #285044;
+            background: #102a27;
+            padding: 6px 9px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 16px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 650;
+            margin-bottom: 8px;
+            color: #dce6f8;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 13px;
+            background: #091426;
+            color: var(--text);
+            border: 1px solid #2b405e;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px #65e0c218;
+        }
+
+        .form-group select option {
+            background: #0e1a2d;
+        }
+
+        .field-hint {
+            color: #8193b1;
+            font-size: 10px;
+            margin-top: 6px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 12px 17px;
+            font-size: 12px;
+            font-weight: 750;
+            transition: transform 0.2s, filter 0.2s, background 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #65e0c2, #72c8e9);
+            color: #071a20;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #15243b;
+            border-color: #2b405e;
+            color: #d6e2f7;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            border: 1px solid #753d4a;
+            background: #321d2a;
+            border-radius: 10px;
+            color: #ffb1ba;
+            font-size: 12px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .result-panel {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: #173e39;
+            color: var(--accent);
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .result-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .result-price {
+            font-size: clamp(29px, 3.5vw, 40px);
+            letter-spacing: -1.3px;
+            line-height: 1.25;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+            margin: 8px 0 10px;
+        }
+
+        .result-status {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .result-divider {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 23px 0;
+        }
+
+        .result-detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 11px;
+            margin-bottom: 11px;
+        }
+
+        .result-detail span:first-child {
+            color: var(--muted);
+        }
+
+        .result-detail span:last-child {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .explanation {
+            margin-top: 18px;
+            border: 1px solid #2a405b;
+            border-radius: 12px;
+            padding: 14px;
+            background: #0a1627;
+        }
+
+        .explanation strong {
+            font-size: 12px;
+        }
+
+        .explanation p {
+            margin-top: 7px;
+            font-size: 11px;
+        }
+
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 23px;
+        }
+
+        .stat-card {
+            padding: 19px;
+            border: 1px solid var(--border);
+            background: #0d192b;
+            border-radius: 14px;
+        }
+
+        .stat-card span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 23px;
+            margin: 6px 0;
+        }
+
+        .stat-card small {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* Models */
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .metric-card {
+            border: 1px solid var(--border);
+            background: linear-gradient(145deg, #12243a, #0d192b);
+            border-radius: 16px;
+            padding: 22px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            border-color: #47796f;
+        }
+
+        .metric-card .metric-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .metric-value {
+            font-size: clamp(22px, 3vw, 31px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            margin: 11px 0 8px;
+            color: var(--accent);
+            overflow-wrap: anywhere;
+        }
+
+        .metric-card p:last-child {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .detail-list {
+            list-style: none;
+            margin-top: 17px;
+        }
+
+        .detail-list li {
+            border-bottom: 1px solid #21334d;
+            padding: 12px 0;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list span:first-child {
+            color: var(--muted);
+        }
+
+        .detail-list span:last-child {
+            text-align: right;
+        }
+
+        .notice {
+            border: 1px solid #38506e;
+            background: #101f34;
+            color: #cbd8ee;
+            padding: 15px 17px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        /* About and Developer */
+
+        .text-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .feature-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border: 1px solid #2b4d57;
+            background: #12302f;
+            color: var(--accent);
+            border-radius: 12px;
+            font-size: 20px;
+            margin-bottom: 17px;
+        }
+
+        .panel ul {
+            padding-left: 19px;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .panel li {
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+
+        .developer-card {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .developer-avatar {
+            width: 112px;
+            height: 112px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #193e47, #283c70);
+            border: 1px solid #36566c;
+            display: grid;
+            place-items: center;
+            color: var(--accent);
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .developer-name {
+            font-size: 26px;
+            letter-spacing: -0.8px;
+            margin-bottom: 5px;
+        }
+
+        .developer-role {
+            color: var(--accent);
+            font-size: 12px;
+            margin-bottom: 14px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 18px;
+        }
+
+        .skill {
+            padding: 8px 12px;
+            border-radius: 9px;
+            background: #14243b;
+            border: 1px solid #2b405e;
+            color: #dce7fa;
+            font-size: 11px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            color: #7486a3;
+            padding: 22px 15px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr 0.7fr;
+                gap: 25px;
+            }
+
+            .prediction-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .result-panel {
+                min-height: auto;
+            }
+
+            .metrics-grid {
+                gap: 10px;
+            }
+
+            .metric-card {
+                padding: 17px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .nav-inner {
+                padding: 13px 16px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 13px;
+            }
+
+            .brand {
+                align-self: flex-start;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 4px;
+            }
+
+            .nav-btn {
+                padding: 9px 3px;
+                font-size: 11px;
+            }
+
+            .page {
+                padding-top: 29px;
+                padding-bottom: 42px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .hero h2 {
+                font-size: 39px;
+            }
+
+            .hero-visual {
+                min-height: 215px;
+            }
+
+            .panel {
+                padding: 19px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid,
+            .text-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .developer-card {
+                grid-template-columns: 1fr;
+            }
+
+            .developer-avatar {
+                width: 85px;
+                height: 85px;
+                font-size: 30px;
+            }
+
+            .section-title {
+                font-size: 31px;
+            }
+
+            .panel-heading {
+                flex-direction: column;
+            }
+
+            .result-price {
+                font-size: 32px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-inner">
+        <div class="brand">
+            <div class="brand-icon">⌂</div>
+            <div>
+                <h1>HomeScope</h1>
+                <p>Bangalore Property Intelligence</p>
+            </div>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <button class="nav-btn active" data-page="home">Home</button>
+            <button class="nav-btn" data-page="models">Models</button>
+            <button class="nav-btn" data-page="about">About</button>
+            <button class="nav-btn" data-page="developer">Developer</button>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- HOME TAB -->
+    <section class="page active" id="home">
+
+        <div class="hero">
+            <div>
+                <div class="eyebrow">✦ Machine Learning Project</div>
+
+                <h2>Find your next home with <span>data.</span></h2>
+
+                <p class="hero-description">
+                    Estimate Bangalore property prices using location,
+                    property size, bedrooms and bathrooms. Explore a
+                    machine-learning-powered estimate before making
+                    your next property decision.
+                </p>
+
+                <div class="hero-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Ridge Regression</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">Scikit-learn</span>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="visual-label">BANGALORE · PROPERTY ESTIMATOR</div>
+                <div class="visual-icon" aria-hidden="true">⌂</div>
+                <div class="visual-caption">
+                    <strong>Smarter property estimates.</strong>
+                    <span>ML powered ↗</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="prediction-layout">
+
+            <section class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Estimate a property price</h3>
+                        <p>Enter the property details below.</p>
+                    </div>
+                    <span class="mini-badge">RIDGE MODEL</span>
+                </div>
+
+                <form id="predictionForm" action="/predict" method="POST">
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="location">Property location</label>
+                            <select id="location" name="location" required>
+                                <option value="">Choose a Bangalore location</option>
+                                {% for location in locations %}
+                                <option value="{{ location }}">{{ location }}</option>
+                                {% endfor %}
+                            </select>
+                            <p class="field-hint">
+                                Choose a location available in the trained dataset.
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bhk">Bedrooms (BHK)</label>
+                            <input
+                                type="number"
+                                id="bhk"
+                                name="bhk"
+                                min="1"
+                                max="20"
+                                step="1"
+                                placeholder="e.g. 3"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bath">Bathrooms</label>
+                            <input
+                                type="number"
+                                id="bath"
+                                name="bath"
+                                min="1"
+                                max="20"
+                                step="1"
+                                placeholder="e.g. 2"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="total_sqft">Total area (square feet)</label>
+                            <input
+                                type="number"
+                                id="total_sqft"
+                                name="total_sqft"
+                                min="100"
+                                max="100000"
+                                step="any"
+                                placeholder="e.g. 1500"
+                                required
+                            >
+                            <p class="field-hint">
+                                Enter the total property area in square feet.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" type="submit" id="predictBtn">
+                            Estimate Price →
+                        </button>
+
+                        <button class="btn btn-secondary" type="button" id="sampleBtn">
+                            Try Sample
+                        </button>
+
+                        <button class="btn btn-secondary" type="reset" id="resetBtn">
+                            Reset
+                        </button>
+                    </div>
+
+                    <div class="error-message" id="formError" role="alert"></div>
+                </form>
+            </section>
+
+            <aside class="panel result-panel" aria-live="polite">
+                <div class="result-icon">₹</div>
+
+                <span class="result-label">Estimated property price</span>
+                <div class="result-price" id="resultPrice">—</div>
+
+                <p class="result-status" id="resultStatus">
+                    Your estimated price will appear here after you submit
+                    the property details.
+                </p>
+
+                <hr class="result-divider">
+
+                <div class="result-detail">
+                    <span>Algorithm</span>
+                    <span>Ridge Regression</span>
+                </div>
+
+                <div class="result-detail">
+                    <span>Prediction type</span>
+                    <span>ML estimate</span>
+                </div>
+
+                <div class="explanation">
+                    <strong>How to interpret this result</strong>
+                    <p id="resultExplanation">
+                        The model estimates a price from the features you
+                        provide. The result is not a property valuation,
+                        offer, or guarantee of the market price.
+                    </p>
+                </div>
+            </aside>
+
+        </div>
+
+        <div class="stats-strip">
+            <div class="stat-card">
+                <span>Model R² score</span>
+                <strong>82.99%</strong>
+                <small>Variation explained on test data</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Regression model</span>
+                <strong>Ridge</strong>
+                <small>Regularized linear regression</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Application</span>
+                <strong>Flask</strong>
+                <small>Python machine learning deployment</small>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MODELS TAB -->
+    <section class="page" id="models">
+
+        <div class="eyebrow">◈ Model evaluation</div>
+
+        <h2 class="section-title">Inside the model</h2>
+
+        <p class="section-description">
+            HomeScope uses Ridge Regression to estimate Bangalore property
+            prices. The following scores come from the evaluation results
+            calculated in the training notebook on a held-out test dataset.
+        </p>
+
+        <div class="metrics-grid">
+
+            <div class="metric-card">
+                <p class="metric-label">R² Score</p>
+                <div class="metric-value">82.99%</div>
+                <p>
+                    The model explains approximately 83% of the observed
+                    variation in property prices in the test dataset.
+                </p>
+            </div>
+
+            <div class="metric-card">
+                <p class="metric-label">Mean Absolute Error</p>
+                <div class="metric-value">20.61</div>
+                <p>
+                    The average absolute difference between actual and
+                    predicted target values.
+                </p>
+            </div>
+
+            <div class="metric-card">
+                <p class="metric-label">Root Mean Squared Error</p>
+                <div class="metric-value">45.85</div>
+                <p>
+                    Measures prediction error while giving larger errors
+                    greater influence.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="panel">
+                <h3>Model details</h3>
+                <p>Key information about the trained prediction pipeline.</p>
+
+                <ul class="detail-list">
+                    <li>
+                        <span>Algorithm</span>
+                        <span>Ridge Regression</span>
+                    </li>
+                    <li>
+                        <span>Estimator file</span>
+                        <span>RidgeModel.pkl</span>
+                    </li>
+                    <li>
+                        <span>Dataset file</span>
+                        <span>Cleaned_data.csv</span>
+                    </li>
+                    <li>
+                        <span>Backend</span>
+                        <span>Python + Flask</span>
+                    </li>
+                    <li>
+                        <span>ML library</span>
+                        <span>Scikit-learn</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="panel">
+                <h3>Features and preprocessing</h3>
+                <p>
+                    The model receives these property features through the
+                    web form and applies the preprocessing defined in the
+                    saved pipeline.
+                </p>
+
+                <ul>
+                    <li>Location — categorical property location</li>
+                    <li>Total square feet — numerical area</li>
+                    <li>Bathrooms — bathroom count</li>
+                    <li>BHK — bedroom configuration</li>
+                    <li>Location encoding and other fitted transformations</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="notice">
+            <strong>Understanding the reported scores:</strong>
+            R² is not the percentage of predictions that are exactly correct.
+            MAE and RMSE are expressed in the same units as the target used
+            during evaluation. If your target is measured in lakhs of rupees,
+            MAE ≈ ₹20.61 lakh and RMSE ≈ ₹45.85 lakh. Confirm the target units
+            in your notebook before interpreting them as currency.
+        </div>
+
+        <div class="notice">
+            <strong>Model limitation:</strong>
+            These are test-set results, not a guarantee of future performance.
+            Estimates can be less reliable for unusual properties, locations
+            with limited training examples, or market conditions not represented
+            in the training data.
+        </div>
+
+    </section>
+
+    <!-- ABOUT TAB -->
+    <section class="page" id="about">
+
+        <div class="eyebrow">ⓘ About HomeScope</div>
+
+        <h2 class="section-title">Turning property data into estimates</h2>
+
+        <p class="section-description">
+            HomeScope is a machine learning web application built to
+            demonstrate how a trained regression model can be used to
+            estimate residential property prices from structured data.
+        </p>
+
+        <div class="text-grid">
+
+            <article class="panel">
+                <div class="feature-icon">⌂</div>
+                <h3>Project objective</h3>
+                <p>
+                    Build an interactive interface that accepts property
+                    details and returns an estimated price from a trained
+                    machine learning pipeline.
+                </p>
+            </article>
+
+            <article class="panel">
+                <div class="feature-icon">▤</div>
+                <h3>Dataset</h3>
+                <p>
+                    The application reads cleaned Bangalore housing data
+                    from Cleaned_data.csv. The available locations populate
+                    the location dropdown dynamically from the dataset.
+                </p>
+            </article>
+
+            <article class="panel">
+                <div class="feature-icon">⌘</div>
+                <h3>Technology stack</h3>
+                <p>
+                    Python handles the backend and prediction workflow.
+                    Flask serves the web pages, while pandas prepares
+                    input data and the saved Scikit-learn pipeline
+                    generates predictions.
+                </p>
+            </article>
+
+            <article class="panel">
+                <div class="feature-icon">◎</div>
+                <h3>Prediction workflow</h3>
+                <p>
+                    A user selects a location and enters property features.
+                    The form sends them to the Flask /predict route, which
+                    creates a DataFrame, runs the saved pipeline, and
+                    returns the predicted price.
+                </p>
+            </article>
+
+        </div>
+
+        <div class="notice">
+            <strong>Important:</strong>
+            This project is an educational prediction tool. It does not
+            account for every factor affecting real estate value, such as
+            property condition, legal status, exact building quality,
+            negotiation, or changing market conditions.
+        </div>
+
+    </section>
+
+    <!-- DEVELOPER TAB -->
+    <section class="page" id="developer">
+
+        <div class="eyebrow">✦ Developer profile</div>
+
+        <h2 class="section-title">The person behind HomeScope</h2>
+
+        <p class="section-description">
+            A student machine learning project focused on building practical
+            skills in data preparation, regression modelling and deployment.
+        </p>
+
+        <div class="panel developer-card">
+
+            <div class="developer-avatar" aria-hidden="true">SM</div>
+
+            <div>
+                <h3 class="developer-name">Shreyas Satish Mandole</h3>
+
+                <p class="developer-role">
+                    B.E. Computer Science Student · Aspiring ML Developer
+                </p>
+
+                <p>
+                    I am developing practical experience in machine learning
+                    and Python-based applications. HomeScope demonstrates
+                    how a trained regression model can be integrated into
+                    an interactive Flask web application.
+                </p>
+
+                <div class="skill-list">
+                    <span class="skill">Python</span>
+                    <span class="skill">Machine Learning</span>
+                    <span class="skill">Flask</span>
+                    <span class="skill">SQL</span>
+                    <span class="skill">Pandas</span>
+                    <span class="skill">NumPy</span>
+                    <span class="skill">Scikit-learn</span>
+                    <span class="skill">HTML & CSS</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-grid">
+
+            <div class="panel">
+                <h3>Project responsibilities</h3>
+                <p>
+                    Use this project to demonstrate the parts you personally
+                    completed, such as data cleaning, feature engineering,
+                    model training, evaluation, or Flask integration.
+                </p>
+            </div>
+
+            <div class="panel">
+                <h3>Learning objectives</h3>
+                <p>
+                    Understand regression pipelines, categorical feature
+                    encoding, model evaluation, form validation, and the
+                    process of serving predictions through a web interface.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    HomeScope · Bangalore House Price Prediction · Built with Python and Flask
+</footer>
+
+<script>
+    // Navigation between the four tabs
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const pages = document.querySelectorAll(".page");
+
+    navButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const targetPage = button.dataset.page;
+
+            navButtons.forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+            pages.forEach(function (page) {
+                page.classList.remove("active");
+            });
+
+            button.classList.add("active");
+            document.getElementById(targetPage).classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+
+    // Prediction form
+    const form = document.getElementById("predictionForm");
+    const predictBtn = document.getElementById("predictBtn");
+    const errorBox = document.getElementById("formError");
+    const resultPrice = document.getElementById("resultPrice");
+    const resultStatus = document.getElementById("resultStatus");
+    const resultExplanation = document.getElementById("resultExplanation");
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.add("show");
+    }
+
+    function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.remove("show");
+    }
+
+    function formatINR(value) {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }).format(value);
+    }
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        clearError();
+
+        if (!form.reportValidity()) {
+            return;
+        }
+
+        const location = document.getElementById("location").value;
+        const bhk = Number(document.getElementById("bhk").value);
+        const bath = Number(document.getElementById("bath").value);
+        const sqft = Number(document.getElementById("total_sqft").value);
+
+        if (!location) {
+            showError("Please select a property location.");
+            return;
+        }
+
+        if (!Number.isInteger(bhk) || bhk < 1 || bhk > 20) {
+            showError("Enter a valid BHK value between 1 and 20.");
+            return;
+        }
+
+        if (!Number.isFinite(bath) || bath < 1 || bath > 20) {
+            showError("Enter a valid bathroom count between 1 and 20.");
+            return;
+        }
+
+        if (!Number.isFinite(sqft) || sqft < 100 || sqft > 100000) {
+            showError("Enter an area between 100 and 100,000 square feet.");
+            return;
+        }
+
+        predictBtn.disabled = true;
+        predictBtn.textContent = "Calculating...";
+
+        resultPrice.textContent = "…";
+        resultStatus.textContent = "The model is processing your property details.";
+
+        try {
+            const response = await fetch("/predict", {
+                method: "POST",
+                body: new FormData(form)
+            });
+
+            if (!response.ok) {
+                throw new Error("The prediction request failed.");
+            }
+
+            const responseText = (await response.text()).trim();
+
+            // The existing Flask backend returns a numeric price as text.
+            const price = Number(responseText);
+
+            if (!responseText || !Number.isFinite(price) || price < 0) {
+                throw new Error(
+                    "The server returned an invalid result. Check your model and Flask logs."
+                );
+            }
+
+            resultPrice.textContent = formatINR(price);
+            resultStatus.textContent =
+                "Estimated price for " + location + " based on your selected features.";
+
+            resultExplanation.textContent =
+                "This estimate was generated by Ridge Regression using " +
+                bhk + " BHK, " + bath + " bathrooms and " +
+                sqft.toLocaleString("en-IN") +
+                " square feet. It is a model estimate, not a guaranteed market value.";
+
+        } catch (error) {
+            resultPrice.textContent = "Unavailable";
+            resultStatus.textContent =
+                "We could not calculate your estimate.";
+            resultExplanation.textContent =
+                "Check that Flask is running, the model and dataset files are available, " +
+                "and the selected inputs are supported by your trained pipeline.";
+
+            showError(
+                error.message ||
+                "Something went wrong. Please try again."
+            );
+
+        } finally {
+            predictBtn.disabled = false;
+            predictBtn.textContent = "Estimate Price →";
+        }
+    });
+
+    // Sample input: location uses the first available dataset option.
+    document.getElementById("sampleBtn").addEventListener("click", function () {
+        const locationSelect = document.getElementById("location");
+        const bhkInput = document.getElementById("bhk");
+        const bathInput = document.getElementById("bath");
+        const sqftInput = document.getElementById("total_sqft");
+
+        if (locationSelect.options.length > 1) {
+            locationSelect.selectedIndex = 1;
+        }
+
+        bhkInput.value = 3;
+        bathInput.value = 2;
+        sqftInput.value = 1500;
+
+        clearError();
+
+        resultPrice.textContent = "Ready";
+        resultStatus.textContent =
+            "Sample details loaded. Submit the form to calculate an estimate.";
+        resultExplanation.textContent =
+            "The sample uses a location from your dataset and illustrative property details. " +
+            "It does not represent a real property listing.";
+    });
+
+    // Reset the form and result panel.
+    document.getElementById("resetBtn").addEventListener("click", function () {
+        clearError();
+
+        resultPrice.textContent = "—";
+        resultStatus.textContent =
+            "Your estimated price will appear here after you submit the property details.";
+
+        resultExplanation.textContent =
+            "The model estimates a price from the features you provide. " +
+            "The result is not a property valuation, offer, or guarantee of the market price.";
+    });
+</script>
+
+</body>
+</html>
