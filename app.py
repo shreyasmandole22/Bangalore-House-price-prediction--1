@@ -11,7 +11,7 @@ pipe = pickle.load(open("RidgeModel.pkl", "rb"))
 @app.route("/")
 def index():
     locations = sorted(df["location"].dropna().unique())
-    return render_template("index1.html", locations=locations)
+    return render_template("index.html", locations=locations)
 
 @app.route("/predict", methods=["POST"])
 def predict():
